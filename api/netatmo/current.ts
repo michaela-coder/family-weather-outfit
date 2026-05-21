@@ -1,5 +1,3 @@
-import type { IncomingMessage, ServerResponse } from 'http';
-
 interface TokenResponse {
   access_token: string;
 }
@@ -58,16 +56,13 @@ async function fetchStationsData(accessToken: string): Promise<StationsResponse>
   return res.json() as Promise<StationsResponse>;
 }
 
-export default async function handler(_req: IncomingMessage, res: ServerResponse) {
-  res.setHeader('Content-Type', 'application/json');
-
+export default async function handler(_req: Request): Promise<Response> {
   const clientId = process.env.NETATMO_CLIENT_ID;
   const clientSecret = process.env.NETATMO_CLIENT_SECRET;
   const refreshToken = process.env.NETATMO_REFRESH_TOKEN;
 
   if (!clientId || !clientSecret || !refreshToken) {
-    res.end(JSON.stringify({ connected: false, message: 'Netatmo není nakonfigurováno' }));
-    return;
+    return Response.json({ connected: false, message: 'Netatmo není nakonfigurováno' });
   }
 
   try {
@@ -76,25 +71,23 @@ export default async function handler(_req: IncomingMessage, res: ServerResponse
 
     const device = stations.body?.devices?.[0];
     if (!device) {
-      res.end(JSON.stringify({ connected: false, message: 'Žádná stanice nenalezena' }));
-      return;
+      return Response.json({ connected: false, message: 'Žádná stanice nenalezena' });
     }
 
-    // NAModule1 = outdoor temperature/humidity, NAModule2 = wind, NAModule3 = rain
+    // NAModule1 = outdoor temp/humidity, NAModule2 = wind, NAModule3 = rain
     const outdoor = device.modules?.find(m => m.type === 'NAModule1')?.dashboard_data;
     const wind = device.modules?.find(m => m.type === 'NAModule2')?.dashboard_data;
     const rain = device.modules?.find(m => m.type === 'NAModule3')?.dashboard_data;
 
     if (outdoor?.Temperature == null || outdoor?.Humidity == null) {
-      res.end(JSON.stringify({ connected: false, message: 'Venkovní modul nemá data' }));
-      return;
+      return Response.json({ connected: false, message: 'Venkovní modul nemá data' });
     }
 
     const measuredAt = outdoor.time_utc
       ? new Date(outdoor.time_utc * 1000).toISOString()
       : new Date().toISOString();
 
-    res.end(JSON.stringify({
+    return Response.json({
       connected: true,
       data: {
         temperature: outdoor.Temperature,
@@ -103,8 +96,13 @@ export default async function handler(_req: IncomingMessage, res: ServerResponse
         rain: rain?.Rain ?? 0,
         measuredAt,
       },
-    }));
-  } catch {
-    res.end(JSON.stringify({ connected: false, message: 'Chyba při načítání dat ze stanice' }));
+    });
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : 'Neznámá chyba';
+    return Response.json({
+      connected: false,
+      message: 'Chyba při načítání dat ze stanice',
+      detail,
+    });
   }
 }
