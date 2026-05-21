@@ -262,44 +262,45 @@
   border-bottom-color: #FFE0B2;
 }
 
-/* ─── Mode switcher ─── */
+/* ─── Location button ─── */
 
-.mode-switcher {
-  display: flex;
-  gap: 10px;
+.location-row {
   margin-bottom: 14px;
 }
 
-.mode-btn {
-  flex: 1;
-  padding: 12px 8px;
-  border: 2px solid #E0E0E0;
+.location-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border: 2px solid #C5CAE9;
   border-radius: 14px;
   background: white;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #777;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #5C6BC0;
   cursor: pointer;
   transition: all 0.18s ease;
   font-family: inherit;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.mode-btn:hover:not(:disabled) {
-  border-color: #BDBDBD;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.mode-btn.active {
-  background: linear-gradient(135deg, #E3F2FD, #EDE7F6);
+.location-btn:hover:not(:disabled) {
+  background: #EEF0FB;
   border-color: #7986CB;
-  color: #3949AB;
 }
 
-.mode-btn:disabled {
+.location-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.spinner-sm {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+  flex-shrink: 0;
 }
 
 /* ─── Status cards ─── */
@@ -411,6 +412,16 @@
   color: #888;
   margin-bottom: 10px;
   font-weight: 600;
+}
+
+/* Netatmo local measurement status */
+
+.netatmo-status {
+  font-size: 0.78rem;
+  color: #AAAAAA;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #F0F0F0;
 }
 
 /* ─── Demo controls ─── */
@@ -578,54 +589,6 @@
   line-height: 1.5;
 }
 
-/* ─── Mode switcher – secondary (test mode, less prominent) ─── */
-
-.mode-btn-secondary {
-  flex: 0 0 auto;
-  min-width: 110px;
-  font-size: 0.85rem;
-  padding: 10px 8px;
-  opacity: 0.75;
-}
-
-.mode-btn-secondary.active {
-  opacity: 1;
-}
-
-/* ─── Demo controls (details/summary, collapsed by default) ─── */
-
-.demo-controls {
-  background: white;
-  border-radius: 16px;
-  padding: 10px 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 14px;
-}
-
-.demo-controls[open] {
-  padding-bottom: 14px;
-}
-
-.demo-controls summary.demo-label {
-  font-size: 0.8rem;
-  color: #AAAAAA;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 700;
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  margin-bottom: 0;
-  padding: 2px 0;
-}
-
-.demo-controls summary.demo-label::-webkit-details-marker {
-  display: none;
-}
-
-.demo-controls[open] summary.demo-label {
-  margin-bottom: 10px;
-}
 
 /* ─── Simplified main outfit grid ─── */
 

@@ -1,8 +1,10 @@
 import type { WeatherDay } from '../types/weather';
+import type { NetatmoCurrentConditions } from '../services/netatmo';
 import WeatherAnimation from './WeatherAnimation';
 
 interface Props {
   weather: WeatherDay;
+  netatmo: NetatmoCurrentConditions | null;
 }
 
 const conditionLabel: Record<string, string> = {
@@ -27,7 +29,8 @@ function sign(t: number) {
   return t > 0 ? `+${t}` : `${t}`;
 }
 
-export default function WeatherHeader({ weather }: Props) {
+export default function WeatherHeader({ weather, netatmo }: Props) {
+
   const {
     temperatureCurrent,
     temperatureMorning,
@@ -72,6 +75,11 @@ export default function WeatherHeader({ weather }: Props) {
           <span>☔ {precipitationProbability}%</span>
         )}
         {weather.isSnowing && <span>❄️ Sněžení</span>}
+      </div>
+      <div className="netatmo-status">
+        {netatmo
+          ? `🏠 U nás: +${netatmo.temperature} °C, vlhkost ${netatmo.humidity} %, vítr ${netatmo.wind} km/h`
+          : '🏠 Lokální měření: nepřipojeno'}
       </div>
     </div>
   );

@@ -1,38 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { WeatherDay } from './types/weather';
-import { scenarios, mockWeather } from './data/mockWeather';
+import { mockWeather } from './data/mockWeather';
 import { getOutfitRecommendation } from './logic/outfitRules';
 import { fetchTodayWeather } from './services/openMeteo';
+import { fetchNetatmoCurrentConditions } from './services/netatmo';
+import type { NetatmoCurrentConditions } from './services/netatmo';
 import WeatherHeader from './components/WeatherHeader';
 import ChildOutfitCard from './components/ChildOutfitCard';
 import OutfitSummary from './components/OutfitSummary';
 import './App.css';
 
-type AppMode = 'mock' | 'real';
 type GeoStatus = 'idle' | 'loading' | 'success' | 'denied' | 'error';
-
-const scenarioButtons = [
-  { key: 'horko', label: 'Horko', emoji: '☀️' },
-  { key: 'teplo', label: 'Teplo', emoji: '🌤️' },
-  { key: 'dest', label: 'Déšť', emoji: '🌧️' },
-  { key: 'chlad', label: 'Chlad', emoji: '🧥' },
-  { key: 'zima', label: 'Zima', emoji: '🧊' },
-  { key: 'mraz', label: 'Mráz', emoji: '❄️' },
-  { key: 'vitr', label: 'Vítr', emoji: '💨' },
-];
 
 function loadName(key: string, fallback: string): string {
   return localStorage.getItem(key) ?? fallback;
 }
 
 export default function App() {
-  const [mode, setMode] = useState<AppMode>('mock');
+  const [usingRealData, setUsingRealData] = useState(false);
   const [geoStatus, setGeoStatus] = useState<GeoStatus>('idle');
   const [weather, setWeather] = useState<WeatherDay>(mockWeather);
-  const [activeScenario, setActiveScenario] = useState<string>('dest');
   const [showSettings, setShowSettings] = useState(false);
   const [boyName, setBoyName] = useState(() => loadName('boyName', 'Kluk'));
   const [girlName, setGirlName] = useState(() => loadName('girlName', 'Holka'));
+  const [netatmoConditions, setNetatmoConditions] = useState<NetatmoCurrentConditions | null>(null);
+
+  useEffect(() => {
+    fetchNetatmoCurrentConditions().then(setNetatmoConditions);
+  }, []);
 
   const outfit = getOutfitRecommendation(weather);
 
@@ -62,7 +57,7 @@ export default function App() {
       const { latitude, longitude } = position.coords;
       const data = await fetchTodayWeather(latitude, longitude);
       setWeather(data);
-      setMode('real');
+      setUsingRealData(true);
       setGeoStatus('success');
     } catch (err) {
       if (err instanceof GeolocationPositionError && err.code === GeolocationPositionError.PERMISSION_DENIED) {
@@ -70,20 +65,8 @@ export default function App() {
       } else {
         setGeoStatus('error');
       }
-      setMode('mock');
-      setWeather(scenarios[activeScenario]);
+      setWeather(mockWeather);
     }
-  }
-
-  function switchToMock() {
-    setMode('mock');
-    setGeoStatus('idle');
-    setWeather(scenarios[activeScenario]);
-  }
-
-  function selectScenario(key: string) {
-    setActiveScenario(key);
-    setWeather(scenarios[key]);
   }
 
   return (
@@ -136,34 +119,22 @@ export default function App() {
         )}
       </header>
 
-      <div className="mode-switcher">
+      <div className="location-row">
         <button
-          className={`mode-btn${mode === 'real' ? ' active' : ''}`}
+          className="location-btn"
           onClick={loadRealWeather}
           disabled={geoStatus === 'loading'}
         >
-          📍 Moje poloha
-        </button>
-        <button
-          className={`mode-btn mode-btn-secondary${mode === 'mock' ? ' active' : ''}`}
-          onClick={switchToMock}
-        >
-          🧪 Testovat
+          {geoStatus === 'loading' ? <><span className="spinner spinner-sm" /> Zjišťuji polohu…</> : '📍 Načíst počasí podle polohy'}
         </button>
       </div>
 
-      {geoStatus === 'loading' && (
-        <div className="status-card loading-card">
-          <span className="spinner" />
-          Zjišťuji polohu a načítám počasí…
-        </div>
-      )}
       {geoStatus === 'denied' && (
         <div className="status-card error-card">
           <span>🔒</span>
           <div>
             <strong>Přístup k poloze byl zamítnut.</strong>
-            <p>Povolte polohu v nastavení prohlížeče, nebo použijte testovací režim.</p>
+            <p>Povolte polohu v nastavení prohlížeče a zkuste to znovu.</p>
           </div>
         </div>
       )}
@@ -172,14 +143,14 @@ export default function App() {
           <span>⚠️</span>
           <div>
             <strong>Počasí se nepodařilo načíst.</strong>
-            <p>Zkontrolujte připojení k internetu nebo použijte testovací režim.</p>
+            <p>Zkontrolujte připojení k internetu a zkuste to znovu.</p>
           </div>
         </div>
       )}
 
       {geoStatus !== 'loading' && (
         <>
-          <WeatherHeader weather={weather} />
+          <WeatherHeader weather={weather} netatmo={netatmoConditions} />
           <div className="children-section">
             <ChildOutfitCard gender="boy" name={boyName} outfit={outfit} weather={weather} />
             <ChildOutfitCard gender="girl" name={girlName} outfit={outfit} weather={weather} />
@@ -188,27 +159,10 @@ export default function App() {
         </>
       )}
 
-      {mode === 'mock' && geoStatus !== 'loading' && (
-        <details className="demo-controls">
-          <summary className="demo-label">🧪 Vyzkoušej různá počasí</summary>
-          <div className="demo-buttons">
-            {scenarioButtons.map((btn) => (
-              <button
-                key={btn.key}
-                className={`demo-btn${activeScenario === btn.key ? ' active' : ''}`}
-                onClick={() => selectScenario(btn.key)}
-              >
-                {btn.emoji} {btn.label}
-              </button>
-            ))}
-          </div>
-        </details>
-      )}
-
       <footer className="app-footer">
-        {mode === 'real' && geoStatus === 'success'
-          ? <p>📡 Reálná data · Open-Meteo API</p>
-          : <p>🧪 Testovací data · <span className="footer-api">Open-Meteo API připraveno</span></p>
+        {usingRealData && geoStatus === 'success'
+          ? <p>📡 Open-Meteo API</p>
+          : <p>🌤️ <span className="footer-api">Open-Meteo API</span></p>
         }
         <p className="footer-disclaimer">Rodinná pomůcka, ne oficiální meteorologická služba.</p>
       </footer>
