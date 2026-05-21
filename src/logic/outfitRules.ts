@@ -133,6 +133,13 @@ export function getOutfitRecommendation(weather: WeatherDay): OutfitRecommendati
   const isWindy = weather.windSpeed > 35;
   const isSnowing = weather.isSnowing || weather.condition === 'snowy';
   const isHighUV = weather.uvIndex >= 6;
+  // UV doporučení dává smysl jen při teplu, bez deště a bez silné oblačnosti
+  const isUVRelevant =
+    isHighUV &&
+    !isRainy &&
+    !isSnowing &&
+    weather.condition !== 'cloudy' &&
+    afternoonTemp >= 18;
 
   const morningClothes = getBaseClothes(morningTemp, true);
   const afternoonClothes = getBaseClothes(afternoonTemp, false);
@@ -157,7 +164,7 @@ export function getOutfitRecommendation(weather: WeatherDay): OutfitRecommendati
     morningClothes.girl.push('🥾 Zimní boty');
   }
 
-  if (isHighUV) {
+  if (isUVRelevant) {
     afternoonClothes.boy.push('🧢 Kšiltovka');
     afternoonClothes.girl.push('🧢 Kšiltovka');
   }
@@ -166,11 +173,11 @@ export function getOutfitRecommendation(weather: WeatherDay): OutfitRecommendati
   const warnings: string[] = [];
 
   if (isRainy) backpack.push('☂️ Deštník nebo pláštěnka');
-  if (isHighUV) backpack.push('🧴 Opalovací krém');
+  if (isUVRelevant) backpack.push('🧴 Opalovací krém');
 
   // Rain omitted from warnings — already covered by backpack and morning clothes
   if (isWindy) warnings.push('💨 Silný vítr – přidejte větrovku!');
-  if (isHighUV) warnings.push('☀️ Vysoké UV – kšiltovka a opalovací krém!');
+  if (isUVRelevant) warnings.push('☀️ Vysoké UV – kšiltovka a opalovací krém!');
   if (isSnowing) warnings.push('❄️ Sněží – zimní boty a rukavice!');
 
   const morningCat = getTemperatureCategory(morningTemp);
@@ -189,7 +196,7 @@ export function getOutfitRecommendation(weather: WeatherDay): OutfitRecommendati
     },
     backpack,
     warnings,
-    headline: buildHeadline(morningCat, isRainy, isSnowing, isHighUV, isWindy),
+    headline: buildHeadline(morningCat, isRainy, isSnowing, isUVRelevant, isWindy),
     afternoonNote: buildAfternoonNote(morningCat, afternoonCat),
   };
 }
