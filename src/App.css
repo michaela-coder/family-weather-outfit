@@ -1,0 +1,729 @@
+/* ─── Layout ─── */
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+  min-height: 100vh;
+}
+
+/* ─── Header ─── */
+
+.app-header {
+  margin-bottom: 16px;
+  padding: 8px 0;
+}
+
+.app-header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.app-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.app-title-block {
+  text-align: left;
+}
+
+.app-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1A237E;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.app-subtitle {
+  font-size: 0.85rem;
+  color: #7986CB;
+  margin: 0;
+}
+
+/* ─── Weather Header ─── */
+
+.weather-header {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 14px;
+}
+
+.weather-header-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.weather-animation svg {
+  display: block;
+}
+
+.weather-temp-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.weather-temp {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.weather-range {
+  font-size: 0.95rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.weather-condition-label {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 600;
+}
+
+.weather-description {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #F0F0F0;
+}
+
+.weather-details {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.weather-details span {
+  font-size: 0.85rem;
+  color: #666;
+  background: #F5F5F5;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ─── Children cards ─── */
+
+.children-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.child-outfit-card {
+  flex: 1;
+  background: white;
+  border-radius: 20px;
+  padding: 14px 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  min-width: 0;
+}
+
+.child-outfit-card.boy {
+  border-top: 5px solid #42A5F5;
+}
+
+.child-outfit-card.girl {
+  border-top: 5px solid #F48FB1;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.figure-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 4px 0;
+  min-height: 200px;
+}
+
+.character-img {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  animation: idle-sway 3.2s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.child-outfit-card.girl .character-img {
+  animation-delay: 1.4s;
+}
+
+.figure-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  font-size: 0.85rem;
+  color: #AAAAAA;
+  font-style: italic;
+}
+
+.temp-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #555;
+  background: #F5F5F5;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+/* ─── Outfit Summary ─── */
+
+.outfit-summary {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 14px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.summary-section h3 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #999;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.summary-section ul {
+  list-style: none;
+}
+
+.summary-section li {
+  font-size: 0.95rem;
+  padding: 5px 0;
+  border-bottom: 1px solid #F5F5F5;
+  color: #444;
+}
+
+.summary-section li:last-child {
+  border-bottom: none;
+}
+
+.boy-section h3 { color: #42A5F5; }
+.girl-section h3 { color: #F48FB1; }
+
+.backpack-section {
+  background: #FFFDE7;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.backpack-section h3 {
+  color: #F9A825;
+}
+
+.warnings-section {
+  background: #FFF3E0;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.warnings-section h3 {
+  color: #EF6C00;
+}
+
+.warnings-section li {
+  color: #E65100;
+  font-weight: 500;
+  border-bottom-color: #FFE0B2;
+}
+
+/* ─── Mode switcher ─── */
+
+.mode-switcher {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border: 2px solid #E0E0E0;
+  border-radius: 14px;
+  background: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #777;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mode-btn:hover:not(:disabled) {
+  border-color: #BDBDBD;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, #E3F2FD, #EDE7F6);
+  border-color: #7986CB;
+  color: #3949AB;
+}
+
+.mode-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── Status cards ─── */
+
+.status-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+}
+
+.status-card p {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.loading-card {
+  background: #E3F2FD;
+  color: #1565C0;
+  align-items: center;
+  font-weight: 600;
+}
+
+.error-card {
+  background: #FFF3E0;
+  color: #E65100;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(21, 101, 192, 0.2);
+  border-top-color: #1565C0;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Outfit Summary – Ráno / Odpoledne ─── */
+
+.period-section {
+  margin-bottom: 16px;
+  border-radius: 14px;
+  border: 1px solid #F0F0F0;
+  overflow: hidden;
+}
+
+.period-section + .period-section {
+  margin-top: 0;
+}
+
+.period-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #F8F9FF;
+  border-bottom: 1px solid #EEF0F8;
+}
+
+.period-emoji {
+  font-size: 1.1rem;
+}
+
+.period-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #555;
+  flex: 1;
+}
+
+.period-temp {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3949AB;
+}
+
+.period-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 12px 14px;
+}
+
+.period-grid .boy-section {
+  border-right: 1px solid #F0F0F0;
+  padding-right: 12px;
+}
+
+.period-grid .girl-section {
+  padding-left: 12px;
+}
+
+/* Weather location */
+
+.weather-location {
+  font-size: 0.82rem;
+  color: #888;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* ─── Demo controls ─── */
+
+.demo-controls {
+  background: white;
+  border-radius: 20px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 14px;
+}
+
+.demo-label {
+  font-size: 0.82rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.demo-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.demo-btn {
+  flex: 1 1 calc(33% - 8px);
+  min-width: 80px;
+  padding: 8px 6px;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  background: #FAFAFA;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.demo-btn:hover {
+  border-color: #BDBDBD;
+  background: #F5F5F5;
+  transform: translateY(-1px);
+}
+
+.demo-btn.active {
+  background: #E3F2FD;
+  border-color: #42A5F5;
+  color: #1565C0;
+}
+
+/* ─── Footer ─── */
+
+.app-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #BDBDBD;
+  padding: 8px 0;
+}
+
+.footer-api {
+  color: #A5D6A7;
+}
+
+.footer-disclaimer {
+  font-size: 0.72rem;
+  color: #CCCCCC;
+  margin-top: 4px;
+}
+
+/* ─── App header with settings gear ─── */
+
+.app-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header-spacer {
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.app-header-center {
+  flex: 1;
+  text-align: center;
+}
+
+.settings-btn {
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.settings-btn:hover,
+.settings-btn.active {
+  background: #EEF0F8;
+}
+
+/* ─── Settings panel ─── */
+
+.settings-panel {
+  display: flex;
+  gap: 12px;
+  background: #F0F4FF;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-top: 10px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-row label {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.settings-row input {
+  flex: 1;
+  min-width: 0;
+  border: 2px solid #C5CAE9;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: white;
+  outline: none;
+  text-align: left;
+  color: #333;
+  transition: border-color 0.15s;
+}
+
+.settings-row input:focus {
+  border-color: #7986CB;
+}
+
+/* ─── Outfit headline ─── */
+
+.outfit-headline {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3949AB;
+  background: #EEF0FB;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* ─── Mode switcher – secondary (test mode, less prominent) ─── */
+
+.mode-btn-secondary {
+  flex: 0 0 auto;
+  min-width: 110px;
+  font-size: 0.85rem;
+  padding: 10px 8px;
+  opacity: 0.75;
+}
+
+.mode-btn-secondary.active {
+  opacity: 1;
+}
+
+/* ─── Demo controls (details/summary, collapsed by default) ─── */
+
+.demo-controls {
+  background: white;
+  border-radius: 16px;
+  padding: 10px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 14px;
+}
+
+.demo-controls[open] {
+  padding-bottom: 14px;
+}
+
+.demo-controls summary.demo-label {
+  font-size: 0.8rem;
+  color: #AAAAAA;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  margin-bottom: 0;
+  padding: 2px 0;
+}
+
+.demo-controls summary.demo-label::-webkit-details-marker {
+  display: none;
+}
+
+.demo-controls[open] summary.demo-label {
+  margin-bottom: 10px;
+}
+
+/* ─── Simplified main outfit grid ─── */
+
+.main-outfit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 4px 0 8px;
+}
+
+.main-outfit-grid .boy-section {
+  border-right: 1px solid #F0F0F0;
+  padding-right: 12px;
+}
+
+.main-outfit-grid .girl-section {
+  padding-left: 12px;
+}
+
+/* ─── Backpack inline row ─── */
+
+.backpack-inline {
+  background: #FFFDE7;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 6px 0;
+  font-size: 0.88rem;
+  color: #555;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex-wrap: wrap;
+  line-height: 1.5;
+}
+
+.backpack-label {
+  font-weight: 700;
+  color: #F9A825;
+  flex-shrink: 0;
+}
+
+/* ─── Afternoon difference note ─── */
+
+.afternoon-note {
+  font-size: 0.87rem;
+  color: #666;
+  background: #F8F9FF;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 4px 0 6px;
+  line-height: 1.5;
+}
+
+/* ─── Detailed breakdown (details/summary) ─── */
+
+.detail-breakdown {
+  margin-top: 10px;
+  border-top: 1px solid #F0F0F0;
+  padding-top: 6px;
+}
+
+.detail-breakdown > summary {
+  font-size: 0.8rem;
+  color: #AAAAAA;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  padding: 4px 0;
+}
+
+.detail-breakdown > summary::-webkit-details-marker {
+  display: none;
+}
+
+.detail-breakdown[open] > summary {
+  color: #7986CB;
+  margin-bottom: 6px;
+}
+
+.detail-breakdown-content {
+  margin-top: 4px;
+}
+
+/* ─── Figure idle animations ─── */
+
+@keyframes idle-sway {
+  0%, 100% { transform: rotate(-1.4deg); }
+  50%       { transform: rotate(1.4deg); }
+}
+
+.figure-sway {
+  animation: idle-sway 3.2s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.figure-sway-girl {
+  animation-delay: 1.4s;
+}

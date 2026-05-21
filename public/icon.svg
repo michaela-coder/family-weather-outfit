@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="38" fill="#3949AB"/>
+  <!-- Sun -->
+  <circle cx="96" cy="72" r="28" fill="#FFD54F"/>
+  <g stroke="#FFD54F" stroke-width="6" stroke-linecap="round">
+    <line x1="96" y1="34" x2="96" y2="24"/>
+    <line x1="96" y1="110" x2="96" y2="120"/>
+    <line x1="58" y1="72" x2="48" y2="72"/>
+    <line x1="134" y1="72" x2="144" y2="72"/>
+    <line x1="70" y1="46" x2="63" y2="39"/>
+    <line x1="122" y1="46" x2="129" y2="39"/>
+    <line x1="70" y1="98" x2="63" y2="105"/>
+    <line x1="122" y1="98" x2="129" y2="105"/>
+  </g>
+  <!-- T-shirt -->
+  <path d="M 74 114 Q 85 106 96 106 Q 107 106 118 114
+           L 148 103 L 156 122 L 140 128 L 140 168 L 52 168 L 52 128 L 36 122 L 44 103 Z"
+        fill="white"/>
+</svg>
