@@ -1,4 +1,4 @@
-export default async function handler() {
+export async function GET() {
   return Response.json({
     connected: false,
     message: 'Netatmo endpoint běží',
