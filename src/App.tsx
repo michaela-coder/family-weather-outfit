@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { WeatherDay } from './types/weather';
 import { mockWeather } from './data/mockWeather';
 import { getOutfitRecommendation } from './logic/outfitRules';
 import { fetchTodayWeather } from './services/openMeteo';
-import { fetchNetatmoCurrentConditions } from './services/netatmo';
-import type { NetatmoCurrentConditions } from './services/netatmo';
 import WeatherHeader from './components/WeatherHeader';
 import ChildOutfitCard from './components/ChildOutfitCard';
 import OutfitSummary from './components/OutfitSummary';
 import './App.css';
 
-type GeoStatus = 'idle' | 'loading' | 'success' | 'denied' | 'error';
+type GeoStatus = 'idle' | 'loading' | 'success' | 'denied' | 'error' | 'weather-error';
 
 function loadName(key: string, fallback: string): string {
   return localStorage.getItem(key) ?? fallback;
@@ -23,12 +21,6 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [boyName, setBoyName] = useState(() => loadName('boyName', 'Kluk'));
   const [girlName, setGirlName] = useState(() => loadName('girlName', 'Holka'));
-  const [netatmoConditions, setNetatmoConditions] = useState<NetatmoCurrentConditions | null>(null);
-
-  useEffect(() => {
-    fetchNetatmoCurrentConditions().then(setNetatmoConditions);
-  }, []);
-
   const outfit = getOutfitRecommendation(weather);
 
   function updateBoyName(name: string) {
@@ -55,17 +47,21 @@ export default function App() {
         });
       });
       const { latitude, longitude } = position.coords;
-      const data = await fetchTodayWeather(latitude, longitude);
-      setWeather(data);
-      setUsingRealData(true);
-      setGeoStatus('success');
+      try {
+        const data = await fetchTodayWeather(latitude, longitude);
+        setWeather(data);
+        setUsingRealData(true);
+        setGeoStatus('success');
+      } catch {
+        setGeoStatus('weather-error');
+        setWeather(mockWeather);
+      }
     } catch (err) {
       if (err instanceof GeolocationPositionError && err.code === GeolocationPositionError.PERMISSION_DENIED) {
         setGeoStatus('denied');
       } else {
         setGeoStatus('error');
       }
-      setWeather(mockWeather);
     }
   }
 
@@ -142,15 +138,24 @@ export default function App() {
         <div className="status-card error-card">
           <span>⚠️</span>
           <div>
-            <strong>Počasí se nepodařilo načíst.</strong>
-            <p>Zkontrolujte připojení k internetu a zkuste to znovu.</p>
+            <strong>Polohu se nepodařilo zjistit.</strong>
+            <p>Zkontrolujte, zda máte zapnutou GPS, a zkuste to znovu.</p>
+          </div>
+        </div>
+      )}
+      {geoStatus === 'weather-error' && (
+        <div className="status-card error-card">
+          <span>🌐</span>
+          <div>
+            <strong>Předpověď počasí se nepodařilo načíst.</strong>
+            <p>Zobrazujeme ukázková data. Zkuste to znovu za chvíli.</p>
           </div>
         </div>
       )}
 
       {geoStatus !== 'loading' && (
         <>
-          <WeatherHeader weather={weather} netatmo={netatmoConditions} />
+          <WeatherHeader weather={weather} />
           <div className="children-section">
             <ChildOutfitCard gender="boy" name={boyName} outfit={outfit} weather={weather} />
             <ChildOutfitCard gender="girl" name={girlName} outfit={outfit} weather={weather} />

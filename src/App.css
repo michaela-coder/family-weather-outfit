@@ -414,9 +414,9 @@
   font-weight: 600;
 }
 
-/* Netatmo local measurement status */
+/* Weather data source label */
 
-.netatmo-status {
+.weather-source {
   font-size: 0.78rem;
   color: #AAAAAA;
   margin-top: 8px;
