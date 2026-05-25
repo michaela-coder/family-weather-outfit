@@ -3,6 +3,7 @@ import WeatherAnimation from './WeatherAnimation';
 
 interface Props {
   weather: WeatherDay;
+  sourceLabel?: string;
 }
 
 const conditionLabel: Record<string, string> = {
@@ -27,7 +28,7 @@ function sign(t: number) {
   return t > 0 ? `+${t}` : `${t}`;
 }
 
-export default function WeatherHeader({ weather }: Props) {
+export default function WeatherHeader({ weather, sourceLabel = 'Zdroj: Open-Meteo' }: Props) {
 
   const {
     temperatureCurrent,
@@ -74,7 +75,7 @@ export default function WeatherHeader({ weather }: Props) {
         )}
         {weather.isSnowing && <span>❄️ Sněžení</span>}
       </div>
-      <div className="weather-source">Zdroj: Open-Meteo</div>
+      <div className="weather-source">{sourceLabel}</div>
     </div>
   );
 }

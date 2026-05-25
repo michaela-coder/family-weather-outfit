@@ -25,7 +25,8 @@ function wmoCodeToDescription(code: number): string {
 }
 
 function maxInRange(arr: number[], from: number, to: number): number {
-  return Math.max(...arr.slice(from, to + 1).filter(v => v != null));
+  const values = arr.slice(from, to + 1).filter(v => Number.isFinite(v));
+  return values.length > 0 ? Math.max(...values) : 0;
 }
 
 export async function fetchTodayWeather(lat: number, lon: number): Promise<WeatherDay> {

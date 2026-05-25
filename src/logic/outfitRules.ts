@@ -41,18 +41,18 @@ function getBaseClothes(temp: number, isMorning: boolean): { boy: string[]; girl
       };
     case 'chladno':
       return {
-        boy: ['👕 Tričko', '👖 Dlouhé kalhoty', '🧥 Mikina nebo bunda'],
-        girl: ['👕 Tričko', '👖 Legíny nebo kalhoty', '🧥 Mikina nebo bunda'],
+        boy: ['🩱 Podvlékací tričko', '👕 Tričko s dlouhým rukávem', '👖 Dlouhé kalhoty', '🧥 Mikina nebo bunda'],
+        girl: ['🩱 Podvlékací tričko', '👕 Tričko s dlouhým rukávem', '👖 Legíny nebo kalhoty', '🧥 Mikina nebo bunda'],
       };
     case 'zima':
       return {
-        boy: ['👕 Tričko', '👖 Kalhoty', '🧥 Softshellová bunda', '🎽 Čelenka'],
-        girl: ['👕 Tričko', '👖 Legíny nebo kalhoty', '🧥 Softshellová bunda', '🎽 Čelenka'],
+        boy: ['🩱 Podvlékací tričko', '👕 Tričko s dlouhým rukávem', '👖 Kalhoty', '🧶 Mikina nebo svetr', '🧥 Softshellová bunda', '🎽 Čelenka'],
+        girl: ['🩱 Podvlékací tričko', '👕 Tričko s dlouhým rukávem', '👖 Legíny nebo kalhoty', '🧶 Mikina nebo svetr', '🧥 Softshellová bunda', '🎽 Čelenka'],
       };
     case 'mraz':
       return {
-        boy: ['👕 Tričko (pod)', '👖 Teplé kalhoty', '🧥 Teplá bunda', '🧤 Rukavice', '🧢 Čepice', '🧣 Šála'],
-        girl: ['👕 Tričko (pod)', '👖 Teplé legíny nebo kalhoty', '🧥 Teplá bunda', '🧤 Rukavice', '🧢 Čepice', '🧣 Šála'],
+        boy: ['🩱 Podvlékací tričko', '👕 Tričko s dlouhým rukávem', '👖 Teplé kalhoty', '🧶 Mikina nebo svetr', '🧥 Teplá bunda', '🧤 Rukavice', '🧢 Čepice', '🧣 Šála'],
+        girl: ['🩱 Podvlékací tričko', '👕 Tričko s dlouhým rukávem', '👖 Teplé legíny nebo kalhoty', '🧶 Mikina nebo svetr', '🧥 Teplá bunda', '🧤 Rukavice', '🧢 Čepice', '🧣 Šála'],
       };
   }
 }
@@ -74,9 +74,9 @@ function buildHeadline(
   const catAction: Record<TemperatureCategory, string> = {
     horko: 'tričko a kraťasy/šaty',
     teplo: 'tričko s kalhotami, ráno mikinu',
-    chladno: 'bundu nebo mikinu',
-    zima: 'softshell a čelenku',
-    mraz: 'teplou bundu, čepici, šálu a rukavice',
+    chladno: 'podvlékačku, tričko s dlouhým rukávem a mikinu/bundu',
+    zima: 'podvlékačku, svetr a softshell s čelenkou',
+    mraz: 'podvlékačku, svetr, teplou bundu, čepici, šálu a rukavice',
   };
 
   const conditions: string[] = [];
@@ -125,13 +125,16 @@ export function getOutfitRecommendation(weather: WeatherDay): OutfitRecommendati
   const morningTemp = weather.temperatureMorning;
   const afternoonTemp = weather.temperatureMax;
 
-  const isRainy =
-    weather.precipitationMm > 0 ||
-    (weather.precipitationProbability ?? 0) > 50 ||
-    weather.condition === 'rainy' ||
-    weather.condition === 'storm';
-  const isWindy = weather.windSpeed > 35;
   const isSnowing = weather.isSnowing || weather.condition === 'snowy';
+  const isRainy =
+    !isSnowing &&
+    (
+      weather.precipitationMm > 0 ||
+      (weather.precipitationProbability ?? 0) > 50 ||
+      weather.condition === 'rainy' ||
+      weather.condition === 'storm'
+    );
+  const isWindy = weather.condition === 'windy' || weather.windSpeed > 35;
   const isHighUV = weather.uvIndex >= 6;
   // UV doporučení dává smysl jen při teplu, bez deště a bez silné oblačnosti
   const isUVRelevant =
@@ -153,7 +156,7 @@ export function getOutfitRecommendation(weather: WeatherDay): OutfitRecommendati
     morningClothes.boy.push('🌧️ Pláštěnka nebo nepromokavá bunda');
     morningClothes.girl.push('🌧️ Pláštěnka nebo nepromokavá bunda');
   }
-  if (isWindy && morningTemp < 20) {
+  if (isWindy && morningTemp < 20 && !hasBulkyJacket) {
     morningClothes.boy.push('🌬️ Větrovka');
     morningClothes.girl.push('🌬️ Větrovka');
   }

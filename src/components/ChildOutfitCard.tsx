@@ -50,9 +50,10 @@ const categoryLabel: Record<TemperatureCategory, string> = {
 };
 
 export default function ChildOutfitCard({ gender, name, outfit, weather }: Props) {
-  const [imgError, setImgError] = useState(false);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const category = outfit.morning.temperatureCategory;
   const src = getCharacterImage(gender, category, weather);
+  const imgError = failedSrc === src;
 
   return (
     <div className={`child-outfit-card ${gender}`}>
@@ -67,7 +68,7 @@ export default function ChildOutfitCard({ gender, name, outfit, weather }: Props
             src={src}
             alt={gender === 'boy' ? 'Chlapec v oblečení podle počasí' : 'Holka v oblečení podle počasí'}
             className="character-img"
-            onError={() => setImgError(true)}
+            onError={() => setFailedSrc(src)}
           />
         )}
       </div>

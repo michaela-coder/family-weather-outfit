@@ -22,6 +22,7 @@ export default function App() {
   const [boyName, setBoyName] = useState(() => loadName('boyName', 'Kluk'));
   const [girlName, setGirlName] = useState(() => loadName('girlName', 'Holka'));
   const outfit = getOutfitRecommendation(weather);
+  const isRealWeather = usingRealData && geoStatus === 'success';
 
   function updateBoyName(name: string) {
     setBoyName(name);
@@ -53,10 +54,12 @@ export default function App() {
         setUsingRealData(true);
         setGeoStatus('success');
       } catch {
+        setUsingRealData(false);
         setGeoStatus('weather-error');
         setWeather(mockWeather);
       }
     } catch (err) {
+      setUsingRealData(false);
       if (err instanceof GeolocationPositionError && err.code === GeolocationPositionError.PERMISSION_DENIED) {
         setGeoStatus('denied');
       } else {
@@ -155,7 +158,10 @@ export default function App() {
 
       {geoStatus !== 'loading' && (
         <>
-          <WeatherHeader weather={weather} />
+          <WeatherHeader
+            weather={weather}
+            sourceLabel={isRealWeather ? 'Zdroj: Open-Meteo' : 'Ukázková data'}
+          />
           <div className="children-section">
             <ChildOutfitCard gender="boy" name={boyName} outfit={outfit} weather={weather} />
             <ChildOutfitCard gender="girl" name={girlName} outfit={outfit} weather={weather} />
@@ -165,9 +171,9 @@ export default function App() {
       )}
 
       <footer className="app-footer">
-        {usingRealData && geoStatus === 'success'
+        {isRealWeather
           ? <p>📡 Open-Meteo API</p>
-          : <p>🌤️ <span className="footer-api">Open-Meteo API</span></p>
+          : <p>🌤️ <span className="footer-api">Ukázková data</span></p>
         }
         <p className="footer-disclaimer">Rodinná pomůcka, ne oficiální meteorologická služba.</p>
       </footer>
