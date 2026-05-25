@@ -63,6 +63,13 @@
   gap: 16px;
 }
 
+.weather-day {
+  font-size: 0.9rem;
+  color: #3949AB;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
 .weather-animation svg {
   display: block;
 }

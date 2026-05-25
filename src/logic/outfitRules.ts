@@ -64,39 +64,38 @@ function buildHeadline(
   isHighUV: boolean,
   isWindy: boolean,
 ): string {
-  const catLabel: Record<TemperatureCategory, string> = {
-    horko: 'Vedro',
-    teplo: 'Teplo',
-    chladno: 'Chladno',
-    zima: 'Zima',
-    mraz: 'Mráz',
-  };
-  const catAction: Record<TemperatureCategory, string> = {
-    horko: 'tričko a kraťasy/šaty',
-    teplo: 'tričko s kalhotami, ráno mikinu',
-    chladno: 'podvlékačku, tričko s dlouhým rukávem a mikinu/bundu',
-    zima: 'podvlékačku, svetr a softshell s čelenkou',
-    mraz: 'podvlékačku, svetr, teplou bundu, čepici, šálu a rukavice',
-  };
+  const sentences: string[] = [];
 
-  const conditions: string[] = [];
-  if (isSnowing) conditions.push('sněžení');
-  else if (isRainy) conditions.push('déšť');
-  if (isWindy) conditions.push('vítr');
-  if (isHighUV) conditions.push('UV');
+  if (isSnowing) {
+    sentences.push('Dnes může sněžit.');
+  } else if (isRainy) {
+    sentences.push('Dnes bude pršet.');
+  } else {
+    const base: Record<TemperatureCategory, string> = {
+      horko: 'Dnes bude velké teplo.',
+      teplo: 'Dnes bude teplo.',
+      chladno: 'Dnes je chladněji, hodí se vrstvy.',
+      zima: 'Dnes bude opravdu zima.',
+      mraz: 'Dnes bude opravdu zima.',
+    };
+    sentences.push(base[cat]);
+  }
 
-  const condLabel = conditions.length > 0
-    ? `${catLabel[cat]} a ${conditions.join(' + ')}`
-    : catLabel[cat];
+  if (isRainy) {
+    sentences.push(cat === 'zima' || cat === 'mraz'
+      ? 'Hodí se nepromokavá vrstva.'
+      : 'Nezapomeňte na pláštěnku.');
+  }
+  if (isWindy) sentences.push('Venku bude větrno.');
+  if (isSnowing) sentences.push('Hodí se teplá bunda a rukavice.');
+  if (isHighUV) sentences.push(cat === 'horko'
+    ? 'Nezapomeňte na pití, kšiltovku a krém.'
+    : 'Hodí se kšiltovka a krém.');
+  if (!isRainy && !isSnowing && cat === 'teplo') sentences.push('Odpoledne může být tepleji.');
+  if (!isRainy && !isSnowing && cat === 'chladno') sentences.push('Dnes se hodí mikina.');
+  if (!isRainy && !isSnowing && (cat === 'zima' || cat === 'mraz')) sentences.push('Nezapomeňte na teplé vrstvy.');
 
-  const extras: string[] = [];
-  // softshell/heavy jackets already cover rain — don't duplicate
-  if (isRainy && cat !== 'zima' && cat !== 'mraz') extras.push('přibal pláštěnku');
-  if (isSnowing && cat !== 'mraz') extras.push('zimní boty a rukavice');
-  if (isHighUV) extras.push('kšiltovku a krém');
-
-  const extrasStr = extras.length > 0 ? ` + ${extras.join(', ')}` : '';
-  return `${condLabel}. Dej ${catAction[cat]}${extrasStr}.`;
+  return sentences.join(' ');
 }
 
 function buildAfternoonNote(morningCat: TemperatureCategory, afternoonCat: TemperatureCategory): string {

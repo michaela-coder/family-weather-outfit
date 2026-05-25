@@ -31,7 +31,7 @@ describe('getOutfitRecommendation', () => {
     expect(outfit.morning.boy).toContain('🌧️ Pláštěnka nebo nepromokavá bunda');
     expect(outfit.morning.girl).toContain('🌧️ Pláštěnka nebo nepromokavá bunda');
     expect(outfit.backpack).toContain('☂️ Deštník nebo pláštěnka');
-    expect(outfit.headline).toContain('déšť');
+    expect(outfit.headline).toContain('Dnes bude pršet.');
   });
 
   it('does not add umbrella or raincoat for snow', () => {

@@ -28,9 +28,23 @@ function sign(t: number) {
   return t > 0 ? `+${t}` : `${t}`;
 }
 
+function formatDayLabel(dateValue: string) {
+  const date = new Date(`${dateValue}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return '';
+
+  const label = new Intl.DateTimeFormat('cs-CZ', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(date);
+
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
 export default function WeatherHeader({ weather, sourceLabel = 'Zdroj: Open-Meteo' }: Props) {
 
   const {
+    date,
     temperatureCurrent,
     temperatureMorning,
     temperatureMin,
@@ -45,9 +59,11 @@ export default function WeatherHeader({ weather, sourceLabel = 'Zdroj: Open-Mete
   } = weather;
 
   const showRain = precipitationMm > 0 || (precipitationProbability ?? 0) > 0;
+  const dayLabel = formatDayLabel(date);
 
   return (
     <div className="weather-header">
+      {dayLabel && <div className="weather-day">{dayLabel}</div>}
       {locationName && (
         <div className="weather-location">📍 {locationName}</div>
       )}
